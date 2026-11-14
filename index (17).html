@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shree Anandhaas – Employee Attendance</title>
+<link href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Hind+Madurai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--g:#019972;--gd:#016b50;--y:#FFDD00;--cream:#FFFBE3;--ink:#10241d;--line:#d9e9c9;--card:#fff;--muted:#4d6a5e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--cream:#0d1f19;--card:#14302a;--ink:#f4f8e8;--line:#245246;--muted:#a9c7b8}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--cream);color:var(--ink);font-family:'Hind Madurai',system-ui,sans-serif;line-height:1.5;padding-bottom:env(safe-area-inset-bottom,0)}
+header{background:var(--g);color:#fff;padding:calc(env(safe-area-inset-top,0px) + 18px) 20px 54px;position:relative;overflow:hidden}
+header::after{content:"";position:absolute;right:-70px;top:-70px;width:200px;height:200px;border-radius:50%;background:var(--y);opacity:.95}
+.brand{display:flex;align-items:center;gap:14px;position:relative;z-index:1;max-width:560px;margin:0 auto}
+.brand img{width:62px;height:62px;border-radius:50%;border:3px solid var(--y)}
+.brand small{display:block;font-size:13px;letter-spacing:.04em;opacity:.9}
+.brand b{font-family:'Young Serif',serif;font-weight:400;font-size:27px;line-height:1.1}
+main{max-width:560px;margin:-34px auto 0;padding:0 16px 40px;position:relative;z-index:2}
+.top{background:var(--y);color:#10241d;border-radius:16px;padding:14px 18px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;box-shadow:0 6px 0 var(--gd)}
+.top span{font-size:14px;font-weight:600}
+.top b{font-family:'Young Serif',serif;font-weight:400;font-size:22px;display:block;line-height:1.2}
+.step{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+.step h2{margin:0 0 12px;font-size:18px;display:flex;align-items:center;gap:10px}
+.n{flex:none;width:30px;height:30px;border-radius:50%;background:var(--g);color:#fff;display:grid;place-items:center;font-size:15px;font-weight:700}
+.step.done .n{background:var(--y);color:#10241d}
+#cam{display:none}
+.shot{display:grid;place-items:center;min-height:190px;border:2.5px dashed var(--g);border-radius:14px;background:rgba(1,153,114,.07);cursor:pointer;overflow:hidden;text-align:center;color:var(--gd);font-weight:600}
+.shot img{width:100%;max-height:300px;object-fit:cover;display:none}
+.shot svg{width:46px;height:46px;stroke:var(--g);fill:none;stroke-width:1.8;display:block;margin:0 auto 6px}
+.btn{display:inline-block;margin-top:10px;padding:10px 16px;border-radius:12px;border:2px solid var(--g);background:none;color:var(--gd);font:600 15px 'Hind Madurai',sans-serif;cursor:pointer}
+.grid{display:none;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px}.grid.open{display:grid}
+.dd{width:100%;display:flex;justify-content:space-between;align-items:center;padding:14px;border-radius:12px;border:2px solid var(--g);background:none;color:var(--ink);font:600 17px 'Hind Madurai',sans-serif;cursor:pointer}
+.dd::after{content:"▾";color:var(--g);font-size:18px}
+.chip{padding:12px 10px;border-radius:12px;border:2px solid var(--line);background:none;color:var(--ink);font:600 15px 'Hind Madurai',sans-serif;text-align:left;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--g);border-color:var(--g);color:#fff}
+.stamp{display:flex;gap:12px}
+.stamp div{flex:1;background:rgba(1,153,114,.09);border-radius:12px;padding:10px 14px}
+.stamp small{display:block;color:var(--muted);font-size:13px}
+.stamp b{font-size:19px}
+.io{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.io button{padding:18px 8px;border-radius:14px;border:2px solid var(--line);background:none;color:var(--ink);font:700 20px 'Hind Madurai',sans-serif;cursor:pointer}
+.io button[aria-pressed=true]{border-color:var(--g);background:var(--g);color:#fff}
+.io button[data-v=OUT][aria-pressed=true]{background:var(--y);border-color:var(--y);color:#10241d}
+label{font-size:14px;color:var(--muted);font-weight:600;display:block;margin:0 0 4px}
+input[type=text]{width:100%;padding:14px;border-radius:12px;border:2px solid var(--line);background:var(--card);color:var(--ink);font:600 18px 'Hind Madurai',sans-serif;text-transform:uppercase}
+input.name{text-transform:none;background:rgba(255,221,0,.25);margin-bottom:0}
+.msg{min-height:20px;font-size:14px;margin:6px 0 10px;color:#b3261e}
+.submit{width:100%;padding:17px;border:0;border-radius:16px;background:var(--g);color:#fff;font:700 20px 'Hind Madurai',sans-serif;box-shadow:0 6px 0 var(--gd);cursor:pointer}
+.submit:active{transform:translateY(3px);box-shadow:0 3px 0 var(--gd)}
+button:focus-visible,input:focus-visible,.shot:focus-visible{outline:3px solid var(--y);outline-offset:2px}
+.ok{display:none;text-align:center;background:var(--card);border:2px solid var(--g);border-radius:18px;padding:30px 18px}
+.ok .tick{width:70px;height:70px;border-radius:50%;background:var(--y);color:var(--gd);display:grid;place-items:center;font-size:38px;margin:0 auto 10px}
+.ok h2{font-family:'Young Serif',serif;font-weight:400;margin:0 0 4px}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <img alt="Shree Anandhaas logo" src="data:image/jpeg;base64,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">
+    <div><small>Sweets &amp; Snacks</small><b>Shree Anandhaas</b></div>
+  </div>
+</header>
+<main>
+  <div class="top"><span>Employee attendance<b id="today">–</b></span><b id="clock">–</b></div>
+
+  <div id="formWrap">
+    <section class="step" id="s1">
+      <h2><span class="n">1</span>Take your photo</h2>
+      <input id="cam" type="file" accept="image/*" capture="user">
+      <div class="shot" id="shot" tabindex="0" role="button" aria-label="Open camera">
+        <div id="shotHint"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>Tap to open camera</div>
+        <img id="prev" alt="Your photo">
+      </div>
+      <button class="btn" id="retake" style="display:none">Retake photo</button>
+    </section>
+
+    <section class="step" id="s2">
+      <h2><span class="n">2</span>Choose your branch</h2>
+      <button class="dd" id="dd" type="button"><span id="ddl">Branches</span></button>
+      <div class="grid" id="branches"></div>
+    </section>
+
+    <section class="step" id="s3">
+      <h2><span class="n">3</span>Date and time</h2>
+      <div class="stamp"><div><small>Date</small><b id="d">–</b></div><div><small>Time</small><b id="t">–</b></div></div>
+    </section>
+
+    <section class="step" id="s4">
+      <h2><span class="n">4</span>In or Out</h2>
+      <div class="io"><button data-v="IN" aria-pressed="false">IN</button><button data-v="OUT" aria-pressed="false">OUT</button></div>
+    </section>
+
+    <section class="step" id="s5">
+      <h2><span class="n">5</span>Employee details</h2>
+      <label for="code">Employee code</label>
+      <input id="code" type="text" placeholder="RE001" maxlength="5" autocomplete="off" style="margin-bottom:12px">
+      <label for="nm">Name</label>
+      <input id="nm" class="name" type="text" readonly placeholder="Name appears here">
+    </section>
+
+    <div class="msg" id="msg" role="alert"></div>
+    <button class="submit" id="go">Submit attendance</button>
+  </div>
+
+  <div class="ok" id="ok">
+    <div class="tick">✓</div>
+    <h2>Attendance submitted</h2>
+    <p id="okTxt"></p>
+    <button class="btn" onclick="location.reload()">Mark another</button>
+  </div>
+</main>
+<script>
+const BRANCHES=["Mugappair","Kolathur","Porur","Selaiyur","Pallavaram","Palavakkam","Avadi","Adyar","Ambattur","Kolathur (Second Branch)"];
+const EMP={RE001:"Thashnamurthy",RE002:"Lokesh",RE003:"Sridhar",RE004:"Thilip",RE005:"Ignesh",RE006:"Jagan",RE007:"Jagannathan",RE008:"Manoj",RE009:"Krishnan",RE010:"Ramesh"};
+const $=id=>document.getElementById(id);
+let branch="",io="",photo="";
+const bw=$("branches");
+BRANCHES.forEach(b=>{const e=document.createElement("button");e.className="chip";e.textContent=b;e.setAttribute("aria-pressed","false");
+  e.onclick=()=>{branch=b;[...bw.children].forEach(c=>c.setAttribute("aria-pressed",c===e));$("ddl").textContent=b;bw.classList.remove("open");$("s2").classList.add("done")};bw.appendChild(e)});
+function tick(){const n=new Date();
+  const d=n.toLocaleDateString("en-IN",{day:"2-digit",month:"short",year:"numeric"});
+  const t=n.toLocaleTimeString("en-IN",{hour:"2-digit",minute:"2-digit",second:"2-digit"});
+  $("d").textContent=d;$("t").textContent=t;$("today").textContent=d;$("clock").textContent=t;$("s3").classList.add("done")}
+["d","t","today","clock"].forEach(i=>$(i).textContent="–");
+$("dd").onclick=()=>bw.classList.toggle("open");
+const open=()=>$("cam").click();
+$("shot").onclick=open;$("shot").onkeydown=e=>{if(e.key==="Enter"||e.key===" ")open()};$("retake").onclick=open;
+$("cam").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>{photo=r.result;ts=Date.now();tick();$("prev").src=photo;$("prev").style.display="block";$("shotHint").style.display="none";$("retake").style.display="inline-block";$("s1").classList.add("done")};r.readAsDataURL(f)};
+document.querySelectorAll(".io button").forEach(b=>b.onclick=()=>{io=b.dataset.v;document.querySelectorAll(".io button").forEach(x=>x.setAttribute("aria-pressed",x===b));$("s4").classList.add("done")});
+$("code").oninput=e=>{const c=e.target.value.trim().toUpperCase();$("nm").value=EMP[c]||"";$("s5").classList.toggle("done",!!EMP[c])};
+const API="https://script.google.com/macros/s/AKfycbwJcg3Sgq_v7BrZLHmQokLKzz7v5cSup8GdMYN9vujfT2yhhFuYv23ioRCjxEN5EgH2/exec";
+let ts=Date.now();
+function shrink(src){return new Promise(res=>{const i=new Image();i.onload=()=>{const k=Math.min(1,720/Math.max(i.width,i.height));const c=document.createElement("canvas");c.width=i.width*k;c.height=i.height*k;c.getContext("2d").drawImage(i,0,0,c.width,c.height);res(c.toDataURL("image/jpeg",0.6))};i.onerror=()=>res(src);i.src=src})}
+$("go").onclick=async()=>{const c=$("code").value.trim().toUpperCase();let m="";
+  if(!photo)m="Take your photo first.";else if(!branch)m="Choose your branch.";else if(!io)m="Select IN or OUT.";else if(!EMP[c])m="Enter a valid employee code (RE001 to RE010).";
+  $("msg").textContent=m;if(m)return;
+  const btn=$("go");btn.disabled=true;btn.textContent="Submitting…";
+  try{
+    const small=await shrink(photo);
+    const r=await fetch(API,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({code:c,type:io,branch:branch,photo:small,timestamp:ts})});
+    const j=await r.json();if(!j.ok)throw new Error(j.message);
+    $("formWrap").style.display="none";$("ok").style.display="block";
+    $("okTxt").textContent=EMP[c]+" ("+c+") · "+branch+" · "+io+" · "+$("d").textContent+", "+$("t").textContent;window.scrollTo(0,0);
+  }catch(e){$("msg").textContent="Could not submit: "+(e.message||"check your internet")+". Try again.";btn.disabled=false;btn.textContent="Submit attendance"}
+};
+</script>
+</body>
+</html>
